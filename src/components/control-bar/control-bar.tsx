@@ -1,10 +1,13 @@
-import { YoutubeLogo, PlayPause, Stop, SpeakerHigh, Sliders, FrameCorners, ArrowsOut } from '@phosphor-icons/react';
+import { YoutubeLogo, PlayPause, Stop, SpeakerHigh, Sliders, FrameCorners, ArrowsOut, Cube } from '@phosphor-icons/react';
 
 import ControlBarButton from './control-bar-button';
 
 import dinoHead from '../../assets/dino-head.png'
+import { useIsTouchableDevice } from '../../hooks/use-is-touchable-device';
 
 function ControlBar() {
+  const isTouchable = useIsTouchableDevice();
+
   return (
     <div
       id='controls'
@@ -20,8 +23,31 @@ function ControlBar() {
       <ControlBarButton icon={Stop} />
       <ControlBarButton icon={SpeakerHigh} />
       <ControlBarButton icon={Sliders} />
-      <ControlBarButton icon={FrameCorners} />
-      <ControlBarButton icon={ArrowsOut} />
+      {isTouchable
+        ? null
+        : <ControlBarButton icon={FrameCorners} />
+      }
+      {isTouchable
+        ? null
+        : <ControlBarButton icon={ArrowsOut} />
+      }
+      <Cube color="darkorchid" weight="duotone">
+        <animate
+          attributeName="opacity"
+          values="0;1;0"
+          dur="4s"
+          repeatCount="indefinite"
+        ></animate>
+        <animateTransform
+          attributeName="transform"
+          attributeType="XML"
+          type="rotate"
+          dur="5s"
+          from="0 0 0"
+          to="360 0 0"
+          repeatCount="indefinite"
+        ></animateTransform>
+      </Cube>
     </div>
   )
 }

@@ -11,8 +11,8 @@ function App() {
       fallback={<Loader />}
     >
       <div className="flex flex-col h-full w-full items-center bg-slate-900">
-        <header className="flex w-full">
-          <nav className="flex fixed w-full items-center p-5 justify-between backdrop-blur-md bg-opacity-10 z-20 border-slate-200">
+        <header className="flex fixed w-full items-center justify-between backdrop-blur-md bg-opacity-10 z-20 p-5">
+          <nav className="flex w-full items-center justify-between">
             <div className="flex items-center gap-4">
               <a className="flex items-center gap-4" href="/" target="_self" rel="noreferrer">
                 <img
