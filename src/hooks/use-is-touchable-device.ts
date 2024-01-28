@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { isTouchableDevice } from '../utils/is-touchable-device';
+import isTouchableDevice from '../utils/is-touchable-device';
 
 /**
  * This hook is used to return if the current device is touchable or not.
@@ -25,6 +25,4 @@ function useIsTouchableDevice(): boolean {
   return isTouchable;
 }
 
-export {
-  useIsTouchableDevice,
-};
+export default useIsTouchableDevice;

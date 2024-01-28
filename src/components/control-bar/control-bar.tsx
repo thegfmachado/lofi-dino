@@ -1,55 +1,63 @@
-import { YoutubeLogo, PlayPause, Stop, SpeakerHigh, Sliders, FrameCorners, ArrowsOut, Cube } from '@phosphor-icons/react';
+import type { ReactElement } from 'react';
+
+import { ArrowsOut, PlayPause, Sliders, SpeakerHigh, SpeakerSlash, Stop, YoutubeLogo } from '@phosphor-icons/react';
 
 import ControlBarButton from './control-bar-button';
 
-import dinoHead from '../../assets/dino-head.png'
-import { useIsTouchableDevice } from '../../hooks/use-is-touchable-device';
+import dinoHead from '../../assets/dino-head.png';
+import useIsTouchableDevice from '../../hooks/use-is-touchable-device';
+import ControlBarModal from './control-bar-modal';
 
-function ControlBar() {
+interface ControlBarProps {
+  isModalOpen: boolean;
+  isVideoMuted: boolean;
+  onChangeVideoButtonClick: () => void;
+  onModalButtonClick: () => void;
+  onCloseModal: () => void;
+  onFullscreenClick: () => void;
+  onMuteUnmuteButtonClick: () => void;
+  onPlayPauseButtonClick: () => void;
+  onStopButtonClick: () => void;
+}
+
+function ControlBar(props: ControlBarProps): ReactElement {
+  const {
+    isModalOpen,
+    isVideoMuted,
+    onChangeVideoButtonClick,
+    onCloseModal,
+    onFullscreenClick,
+    onModalButtonClick,
+    onMuteUnmuteButtonClick,
+    onPlayPauseButtonClick,
+    onStopButtonClick,
+  } = props;
+
   const isTouchable = useIsTouchableDevice();
 
   return (
-    <div
-      id='controls'
-      className="absolute flex items-center mx-auto gap-12 bg-slate-900 bg-clip-padding backdrop-blur bg-opacity-50 backdrop-saturate-100 backdrop-contrast-100 rounded-full p-4 bottom-[6.5rem]"
-    >
-      <img
-        src={dinoHead}
-        alt="Lo-fi Dino head logo"
-        width={32}
-      />
-      <ControlBarButton icon={YoutubeLogo} />
-      <ControlBarButton icon={PlayPause} />
-      <ControlBarButton icon={Stop} />
-      <ControlBarButton icon={SpeakerHigh} />
-      <ControlBarButton icon={Sliders} />
-      {isTouchable
-        ? null
-        : <ControlBarButton icon={FrameCorners} />
-      }
-      {isTouchable
-        ? null
-        : <ControlBarButton icon={ArrowsOut} />
-      }
-      <Cube color="darkorchid" weight="duotone">
-        <animate
-          attributeName="opacity"
-          values="0;1;0"
-          dur="4s"
-          repeatCount="indefinite"
-        ></animate>
-        <animateTransform
-          attributeName="transform"
-          attributeType="XML"
-          type="rotate"
-          dur="5s"
-          from="0 0 0"
-          to="360 0 0"
-          repeatCount="indefinite"
-        ></animateTransform>
-      </Cube>
-    </div>
-  )
+    <>
+      <div
+        id="controls"
+        className="absolute flex items-center mx-auto gap-6 bg-slate-900 backdrop-blur bg-opacity-50 backdrop-saturate-100 backdrop-contrast-100 rounded-full px-6 py-4 bottom-[6.5rem]"
+      >
+        <img src={dinoHead} alt="Lo-fi Dino head logo" width={32} />
+        <div className="h-10 w-px bg-white"></div>
+        <ControlBarButton onClick={onChangeVideoButtonClick} icon={YoutubeLogo} tip="Change video" />
+        <ControlBarButton icon={PlayPause} onClick={onPlayPauseButtonClick} tip="Play/pause" />
+        <ControlBarButton icon={Stop} onClick={onStopButtonClick} tip="Stop" />
+        <ControlBarButton
+          icon={isVideoMuted ? SpeakerSlash : SpeakerHigh}
+          onClick={onMuteUnmuteButtonClick}
+          tip={isVideoMuted ? 'Unmute' : 'Mute'}
+        />
+        <ControlBarButton icon={Sliders} tip="Volume mixer" />
+        {isTouchable ? null : <ControlBarButton icon={ArrowsOut} tip="Full screen" onClick={onFullscreenClick} />}
+      </div>
+
+      <ControlBarModal onClose={onCloseModal} onModalButtonClick={onModalButtonClick} open={isModalOpen} />
+    </>
+  );
 }
 
 export default ControlBar;
