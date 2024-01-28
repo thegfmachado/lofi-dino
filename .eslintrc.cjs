@@ -12,13 +12,30 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: ['react-refresh'],
   rules: {
-    'react-refresh/only-export-components': [
-      'warn',
-      { allowConstantExport: true },
-    ],
+    'comma-dangle': ['error', 'always-multiline'],
     'react/react-in-jsx-scope': 'off',
-    '@typescript-eslint/no-explicit-any': 'error',
-    'sort-keys': 'error',
+    'no-restricted-imports': 'off',
+    'no-use-before-define': 'off',
+    'no-use-before-define': 'off',
+    'nonblock-statement-body-position': ['error', 'beside'],
+    'object-curly-spacing': ['error', 'always'],
+    'prefer-object-spread': 'error',
+    'prefer-rest-params': 'error',
+    'prefer-spread': 'error',
+    'quotes': ['error', 'single', {
+      allowTemplateLiterals: true,
+    }],
+    'rest-spread-spacing': ['error', 'never'],
+    'semi': 'off',
+    'sort-imports': ['error', {
+      ignoreCase: true,
+      ignoreDeclarationSort: true,
+      ignoreMemberSort: false,
+    }],
+    'sort-keys': ['error', 'asc', {
+      caseSensitive: false,
+      natural: true,
+    }],
   },
   parserOptions: {
     ecmaVersion: 'latest',

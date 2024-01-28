@@ -85,6 +85,13 @@ export default {
           'end-color': {
             300: '#F9CB28',
           },
+        },
+        'brand-indigo': {
+          '100': '#9166e9',
+          '200': '#a884f4',
+          '300': '',
+          '400': '#5420b5',
+          '500': '#3c198a',
         }
       }
     },
@@ -93,7 +100,14 @@ export default {
     require('daisyui'),
   ],
   daisyui: {
-    themes: ['dracula'],
+    themes: [
+      {
+        dracula: {
+          ...require('daisyui/src/theming/themes')['dracula'],
+          secondary: '#8b5cf6',
+        }
+      }
+    ],
   },
 }
 
