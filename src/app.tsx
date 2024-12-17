@@ -125,6 +125,19 @@ function App(): ReactElement {
           />
         </section>
 
+        <div id="audios">
+          <audio id="forestSound" src="./assets/audio/forest_night.mp3" loop></audio>
+          <audio id="fireplaceSound" src="./assets/audio/fireplace.mp3" loop></audio>
+          <audio id="oceanSound" src="./assets/audio/ocean.mp3" loop></audio>
+          <audio id="keyboardSound" src="./assets/audio/keyboard.mp3" loop></audio>
+          <audio id="stormRainSound" src="./assets/audio/summer_storm.mp3" loop></audio>
+          <audio id="cityRainSound" src="./assets/audio/rain_city.mp3" loop></audio>
+          <audio id="underwaterSound" src="./assets/audio/underwater.mp3" loop></audio>
+          <audio id="birdsSound" src="./assets/audio/birds.mp3" loop></audio>
+          <audio id="coffeeShopSound" src="./assets/audio/coffee.mp3" loop></audio>
+          <audio id="snowSound" src="./assets/audio/snow.mp3" loop></audio>
+        </div>
+
         <footer className="h-full pt-20 pb-5 flex flex-col gap-4 justify-center items-center sm:text-base lg:text-lg mt-10">
           {/* bg-gradient-to-r from-purple-500 from-0% via-blue-700 via-50% to-pink-600 to-100% */}
           <a
