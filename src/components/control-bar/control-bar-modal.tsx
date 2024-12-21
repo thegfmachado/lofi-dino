@@ -1,17 +1,28 @@
 import type { ReactElement } from 'react';
 
-import { CheckSquare } from '@phosphor-icons/react';
+import { EnumOrStringLiteralTypes } from '../../types/common';
+
+import { ControlBarURLForm } from './control-bar-url-form';
+import { ControlBarSoundEffects } from './control-bar-sound-effects';
 
 import classNames from '../../utils/class-names';
 
-interface ControlBarModalProps {
-  onClose: () => void;
-  onModalButtonClick: () => void;
-  open: boolean;
+export enum ControlBarModalMode {
+  URL = 'url',
+  SOUND_EFFECTS = 'soundEffects',
 }
 
-function ControlBarModal(props: ControlBarModalProps): ReactElement {
-  const { onClose, onModalButtonClick, open } = props;
+export type ControlBarModalProps = {
+  mode: EnumOrStringLiteralTypes<ControlBarModalMode>;
+  onClose: () => void;
+  onURLFormSubmit: () => void;
+  onSoundEffectButtonClick: (key: string) => void;
+  open: boolean;
+  videoURLInputRef: React.RefObject<HTMLInputElement>;
+}
+
+export function ControlBarModal(props: ControlBarModalProps): ReactElement {
+  const { onClose, onURLFormSubmit, onSoundEffectButtonClick, open, mode, videoURLInputRef } = props;
 
   const className = classNames({
     modal: true,
@@ -20,23 +31,12 @@ function ControlBarModal(props: ControlBarModalProps): ReactElement {
 
   return (
     <dialog className={className}>
-      <div className="modal-box flex flex-col gap-2 backdrop-blur bg-opacity-80 backdrop-saturate-400 backdrop-contrast-300">
-        <label htmlFor="videoURL">Enter YouTube Video URL</label>
-        <div className="flex gap-4">
-          <input
-            type="text"
-            id="videoURL"
-            placeholder="https://www.youtube.com/watch?v=_3-fYqCFbHQ"
-            className="input input-bordered w-full"
-          />
-          <button className="btn btn-square" onClick={onModalButtonClick}>
-            <CheckSquare size={28} />
-          </button>
-        </div>
+      <div className="modal-box w-fit px-2 py-8 flex flex-col gap-2 backdrop-blur bg-opacity-80 backdrop-saturate-400 backdrop-contrast-300">
+        {mode === ControlBarModalMode.URL ? (
+          <ControlBarURLForm onSubmit={onURLFormSubmit} videoURLInputRef={videoURLInputRef} />
+        ) : <ControlBarSoundEffects onButtonClick={onSoundEffectButtonClick} />}
       </div>
       <div className="modal-backdrop" onClick={onClose} />
     </dialog>
   );
 }
-
-export default ControlBarModal;

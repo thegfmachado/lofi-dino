@@ -50,16 +50,18 @@ function VideoPlayer(props: VideoPlayerProps): ReactElement {
   }
 
   return (
-    <YouTube
-      style={{
-        height: '100%',
-        width: '100%',
-      }}
-      iframeClassName="pointer-events-none"
-      videoId={videoId}
-      opts={options}
-      onReady={onPlayerReady}
-    />
+    <div className="border-2 w-full h-full">
+      <YouTube
+        style={{
+          height: '100%',
+          width: '100%',
+        }}
+        iframeClassName="pointer-events-none"
+        videoId={videoId}
+        opts={options}
+        onReady={onPlayerReady}
+      />
+    </div>
   );
 }
 

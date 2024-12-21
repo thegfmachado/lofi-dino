@@ -1,25 +1,64 @@
-import { Suspense, useEffect, useState } from 'react';
+import * as React from 'react';
 import type { ReactElement } from 'react';
-
-import ControlBar from './components/control-bar/control-bar';
 
 import Loader from './components/loader/loader';
 import logo from './assets/logo.svg';
+
+import ControlBar from './components/control-bar/control-bar';
 import { VideoPlayer } from './components/video-player/video-player';
 import type { YouTubePlayerInstance } from './components/video-player/video-player';
+import { ControlBarModalMode } from './components/control-bar/control-bar-modal';
+import { Audio } from './components/audio/audio';
+
+import { AUDIO_METADATA, DEFAULT_VIDEO_URL } from './constants/constants';
 import { isContentfulString } from './utils/strings';
 
-const defaultVideoUrl = 'https://www.youtube.com/embed/_3-fYqCFbHQ?si=wpfe9Jhnnc7gCYUW';
 
 function App(): ReactElement {
-  const [player, setPlayer] = useState<YouTubePlayerInstance>();
-  const [videoURL, setVideoURL] = useState(defaultVideoUrl);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isFullScreen, setIsFullScreen] = useState(false);
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
-  const [isVideoMuted, setIsVideoMuted] = useState(false);
+  const [player, setPlayer] = React.useState<YouTubePlayerInstance>();
+  const [videoURL, setVideoURL] = React.useState(DEFAULT_VIDEO_URL);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [isFullScreen, setIsFullScreen] = React.useState(false);
+  const [isVideoPlaying, setIsVideoPlaying] = React.useState(false);
+  const [isVideoMuted, setIsVideoMuted] = React.useState(false);
+  const [controlBarMode, setControlBarMode] = React.useState<ControlBarModalMode>(ControlBarModalMode.URL);
 
-  useEffect(() => {
+  const playerSectionRef = React.useRef<HTMLElement>(null);
+  const videoURLInputRef = React.useRef<HTMLInputElement>(null);
+
+  const forestAudioRef = React.useRef<HTMLAudioElement>(null);
+  const fireplaceAudioRef = React.useRef<HTMLAudioElement>(null);
+  const oceanAudioRef = React.useRef<HTMLAudioElement>(null);
+  const keyboardAudioRef = React.useRef<HTMLAudioElement>(null);
+  const rainAudioRef = React.useRef<HTMLAudioElement>(null);
+  const trafficAudioRef = React.useRef<HTMLAudioElement>(null);
+  const birdsAudioRef = React.useRef<HTMLAudioElement>(null);
+  const coffeeAudioRef = React.useRef<HTMLAudioElement>(null);
+  const snowAudioRef = React.useRef<HTMLAudioElement>(null);
+
+  const audioMetadataToRefs = React.useMemo(() => ({
+    birds: birdsAudioRef,
+    coffee: coffeeAudioRef,
+    fireplace: fireplaceAudioRef,
+    forest: forestAudioRef,
+    keyboard: keyboardAudioRef,
+    ocean: oceanAudioRef,
+    rain: rainAudioRef,
+    snow: snowAudioRef,
+    traffic: trafficAudioRef,
+  }), []);
+
+  React.useEffect(() => {
+    for (const soundEffectRef of Object.values(audioMetadataToRefs)) {
+      if (!soundEffectRef.current) {
+        continue;
+      }
+
+      soundEffectRef.current.volume = 0.25;
+    }
+  }, [audioMetadataToRefs]);
+
+  React.useEffect(() => {
     const handleFullScreenChange = () => {
       setIsFullScreen(!isFullScreen);
     };
@@ -37,17 +76,50 @@ function App(): ReactElement {
     };
   }, [isFullScreen]);
 
-  const onModalButtonClick = () => {
-    const element = document.getElementById('videoURL') as HTMLInputElement;
+  const openModal = (mode: ControlBarModalMode) => {
+    setControlBarMode(mode);
+    setIsModalOpen(true);
+  }
+
+  const onURLFormSubmit = () => {
+    const element = videoURLInputRef.current
 
     if (!element) {
       return;
     }
 
-    const url = isContentfulString(element.value) ? element.value : defaultVideoUrl;
+    const url = isContentfulString(element.value) ? element.value : DEFAULT_VIDEO_URL;
 
     setVideoURL(url);
     setIsModalOpen(false);
+  };
+
+  const onSoundEffectButtonClick = (key: string) => {
+    playOrPauseSoundEffect(audioMetadataToRefs[key as keyof typeof AUDIO_METADATA]);
+  }
+
+  const pauseAllSoundEffects = () => {
+    for (const soundEffectRef of Object.values(audioMetadataToRefs)) {
+      if (!soundEffectRef.current) {
+        continue;
+      }
+
+      soundEffectRef.current.pause();
+    }
+  };
+
+  const muteOrUnmuteAllSoundEffects = () => {
+    for (const soundEffectRef of Object.values(audioMetadataToRefs)) {
+      if (!soundEffectRef.current) {
+        continue;
+      }
+
+      if (soundEffectRef.current.muted) {
+        soundEffectRef.current.muted = false;
+      } else {
+        soundEffectRef.current.muted = true;
+      }
+    }
   };
 
   const toggleFullscreen = () => {
@@ -55,9 +127,19 @@ function App(): ReactElement {
       return void document.exitFullscreen();
     }
 
-    const element = document.getElementById('player-section');
+    void playerSectionRef.current?.requestFullscreen();
+  };
 
-    void element?.requestFullscreen();
+  const playOrPauseSoundEffect = (soundEffectRef: React.RefObject<HTMLAudioElement>): void => {
+    if (!soundEffectRef.current) {
+      return;
+    }
+
+    if (soundEffectRef.current.paused) {
+      return void soundEffectRef.current.play();
+    }
+
+    void soundEffectRef.current.pause();
   };
 
   const playOrPauseMedia = (): void => {
@@ -70,6 +152,7 @@ function App(): ReactElement {
   const stopMedia = (): void => {
     setIsVideoPlaying(false);
     player?.stopVideo();
+    pauseAllSoundEffects();
   };
 
   const muteOrUnmuteMedia = (): void => {
@@ -78,12 +161,13 @@ function App(): ReactElement {
       setIsVideoMuted(shouldMute);
 
       shouldMute ? player?.mute() : player?.unMute();
+      muteOrUnmuteAllSoundEffects();
     }
   };
 
   return (
-    <Suspense fallback={<Loader />}>
-      <div className="flex flex-col h-full w-full items-center bg-slate-900">
+    <React.Suspense fallback={<Loader />}>
+      <div className="flex flex-col items-center bg-slate-900">
         <header className="flex fixed w-full items-center justify-between backdrop-blur-md bg-opacity-10 z-20 p-5">
           <nav className="flex w-full items-center justify-between">
             <div className="flex items-center gap-4">
@@ -107,39 +191,32 @@ function App(): ReactElement {
           </nav>
         </header>
 
-        <section
-          className="flex justify-center gap-6 mt-[9rem] w-5/6 h-[45rem] border z-10"
-          id="player-section"
-        >
+        <section className="flex relative justify-center gap-6 mt-[9rem] w-full md:w-5/6 p-4 h-[45rem] z-10" ref={playerSectionRef}>
           <VideoPlayer url={videoURL} onReady={setPlayer} />
           <ControlBar
             onCloseModal={() => setIsModalOpen(false)}
-            onChangeVideoButtonClick={() => setIsModalOpen(true)}
-            onFullscreenClick={toggleFullscreen}
-            onModalButtonClick={onModalButtonClick}
+            onChangeVideoButtonClick={() => openModal(ControlBarModalMode.URL)}
+            onSoundEffectsButtonClick={() => openModal(ControlBarModalMode.SOUND_EFFECTS)}
+            onFullscreenButtonClick={toggleFullscreen}
+            onURLFormSubmit={onURLFormSubmit}
+            onSoundEffectButtonClick={onSoundEffectButtonClick}
             isModalOpen={isModalOpen}
+            mode={controlBarMode}
             isVideoMuted={isVideoMuted}
             onMuteUnmuteButtonClick={muteOrUnmuteMedia}
             onPlayPauseButtonClick={playOrPauseMedia}
             onStopButtonClick={stopMedia}
+            videoURLInputRef={videoURLInputRef}
           />
         </section>
 
-        <div id="audios">
-          <audio id="forestSound" src="./assets/audio/forest_night.mp3" loop></audio>
-          <audio id="fireplaceSound" src="./assets/audio/fireplace.mp3" loop></audio>
-          <audio id="oceanSound" src="./assets/audio/ocean.mp3" loop></audio>
-          <audio id="keyboardSound" src="./assets/audio/keyboard.mp3" loop></audio>
-          <audio id="stormRainSound" src="./assets/audio/summer_storm.mp3" loop></audio>
-          <audio id="cityRainSound" src="./assets/audio/rain_city.mp3" loop></audio>
-          <audio id="underwaterSound" src="./assets/audio/underwater.mp3" loop></audio>
-          <audio id="birdsSound" src="./assets/audio/birds.mp3" loop></audio>
-          <audio id="coffeeShopSound" src="./assets/audio/coffee.mp3" loop></audio>
-          <audio id="snowSound" src="./assets/audio/snow.mp3" loop></audio>
+        <div>
+          {Object.entries(AUDIO_METADATA).map(([key, { src }]) => (
+            <Audio key={key} ref={audioMetadataToRefs[key as keyof typeof AUDIO_METADATA]} src={src} />
+          ))}
         </div>
 
         <footer className="h-full pt-20 pb-5 flex flex-col gap-4 justify-center items-center sm:text-base lg:text-lg mt-10">
-          {/* bg-gradient-to-r from-purple-500 from-0% via-blue-700 via-50% to-pink-600 to-100% */}
           <a
             className="btn btn-outline text-base md:text-lg btn-secondary"
             href="https://github.com/thegfmachado"
@@ -153,7 +230,7 @@ function App(): ReactElement {
           </p>
         </footer>
       </div>
-    </Suspense>
+    </React.Suspense>
   );
 }
 
