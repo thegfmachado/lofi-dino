@@ -1,33 +1,51 @@
-# lofi-dino
-Relax &amp; focus
+# Lofi-dino 🎵🦖  
 
-# React + TypeScript + Vite
+**Enhance your lofi moments** with ambient sounds while listening to any YouTube video! 🌧️🐦🚗  
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 📝 Description  
 
-Currently, two official plugins are available:
+**Lofi-dino** is an application that lets you play any YouTube video while adding ambient sound effects, such as rain, birds, traffic, and more. Perfect for complementing your lofi experience or creating the ideal soundscape for focus, relaxation, or study.  
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---  
 
-## Expanding the ESLint configuration
+## 💡 Motivation  
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Sometimes, the right ambient sound makes all the difference in getting into the flow. Whether you're enhancing the lofi you love or giving a unique touch to any YouTube video, **Lofi-dino** is the missing tool for crafting the perfect soundtrack for your moment.  
 
-- Configure the top-level `parserOptions` property like this:
+---  
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+## 🚀 Features  
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+- **Compatible with any YouTube video**: Use the link to start with any video.  
+- **Customizable sound effects**: Combine ambient sounds with your video.
+- **Intuitive interface**: Easy to use and accessible on any device.
+
+---  
+
+## 🛠️ Technologies Used  
+
+- [React](https://react.dev/)  
+- [TypeScript](https://www.typescriptlang.org/)  
+- [Tailwind](https://tailwindcss.com)  
+- [daisyUI](https://daisyui.com/)  
+- [YouTube API](https://developers.google.com/youtube)  
+
+---  
+
+## 🔧 How to Run  
+
+1. Clone this repository:  
+   ```bash  
+   git clone https://github.com/your-username/lofi-dino.git  
+   ```  
+2. Install dependencies:  
+   ```bash  
+   cd lofi-dino  
+   npm install  
+   ```  
+3. Start the project:  
+   ```bash  
+   npm run dev  
+   ```  
+
+---  
