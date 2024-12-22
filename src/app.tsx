@@ -218,7 +218,7 @@ function App(): ReactElement {
 
         <footer className="h-full pt-20 pb-5 flex flex-col gap-4 justify-center items-center sm:text-base lg:text-lg mt-10">
           <a
-            className="btn btn-outline text-base md:text-lg btn-secondary"
+            className="btn btn-outline text-base md:text-lg btn-secondary font-handjet"
             href="https://github.com/thegfmachado"
             target="_blank"
             rel="noreferrer"

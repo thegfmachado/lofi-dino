@@ -93,7 +93,10 @@ export default {
           '400': '#5420b5',
           '500': '#3c198a',
         }
-      }
+      },
+      fontFamily: {
+        handjet: ["Handjet", "sans-serif"],
+      },
     },
   },
   plugins: [
